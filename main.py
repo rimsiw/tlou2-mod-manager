@@ -50,15 +50,9 @@ def question_setup():
 def add_mods(modsdir):
     """Add mods using text-based path input"""
     print("\n=== Add Mods ===")
-    print("Enter the full path to the mod file (.psarc) or directory containing mods.")
-    print("Type 'cancel' to return to the main menu.")
 
     while True:
-        mod_path = input("Path to mod file or directory: ").strip()
-
-        if not mod_path or mod_path.lower() == 'cancel':
-            print("Returning to main menu...")
-            return
+        mod_path = questionary.path(message='Enter the full path to the mod file (.psarc) or directory containing mods.',).ask()
 
         mod_path = os.path.expanduser(mod_path)
         if not os.path.exists(mod_path):
@@ -67,9 +61,9 @@ def add_mods(modsdir):
 
         if os.path.isfile(mod_path):
             if not mod_path.lower().endswith('.psarc'):
-                print("Warning: The file doesn't have a .psarc extension. Are you sure this is a mod file?")
-                confirm = input("Continue anyway? (y/n): ").strip().lower()
-                if confirm != 'y' and confirm != 'yes':
+                print("")
+                confirm = questionary.confirm(message='Warning: The file does not have a .psarc extension. Are you sure this is a mod file?').ask()
+                if confirm != True:
                     continue
 
             file_name = os.path.basename(mod_path)
@@ -81,29 +75,10 @@ def add_mods(modsdir):
             except Exception as e:
                 print(f"Failed to add {file_name}: {str(e)}")
 
-        elif os.path.isdir(mod_path):
-            psarc_files = [f for f in os.listdir(mod_path) if f.lower().endswith('.psarc')]
+        # Feature for directories in the works
 
-            if not psarc_files:
-                print(f"No .psarc files found in '{mod_path}'.")
-                continue
-
-            successful = 0
-            for file_name in psarc_files:
-                source = os.path.join(mod_path, file_name)
-                destination = os.path.join(modsdir, file_name)
-
-                try:
-                    shutil.copy2(source, destination)
-                    successful += 1
-                    print(f"Added mod: {file_name}")
-                except Exception as e:
-                    print(f"Failed to add {file_name}: {str(e)}")
-
-            print(f"\nSuccessfully added {successful} out of {len(psarc_files)} mods.")
-
-        add_more = input("Add more mods? (y/n): ").strip().lower()
-        if add_more != 'y' and add_more != 'yes':
+        add_more = questionary.confirm(message='Add more?')
+        if add_more != True:
             break
 
 def main():
