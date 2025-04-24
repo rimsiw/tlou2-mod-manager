@@ -2,6 +2,7 @@ import questionary
 import os
 import json
 import shutil
+import sys
 
 jsonfile = "settings.json"
 
@@ -45,7 +46,7 @@ def question_setup():
             return question_setup()
         else:
             print("Exiting program as no path was set.")
-            exit()
+            sys.exit()
 
 def add_mods(modsdir):
     """Add mods using text-based path input"""
@@ -95,7 +96,7 @@ def main():
         opt = question_setup()
         if not opt:
             print("Setup cancelled. Exiting.")
-            exit()
+            sys.exit()
 
     tloupath = os.path.expanduser(opt['filepath'])
 
