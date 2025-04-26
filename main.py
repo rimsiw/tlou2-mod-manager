@@ -3,8 +3,20 @@ import os
 import json
 import shutil
 import sys
+import requests
 
+LOCAL_VERSION = "0.3.1"
 jsonfile = "settings.json"
+
+def update():
+    try:
+        response = requests.get("https://raw.githubusercontent.com/rimsiw/tlou2-mod-manager/refs/heads/main/version", timeout=5)
+        if response.status_code == 200:
+            LATEST_VERSION = response.text.strip()
+            if LATEST_VERSION != LOCAL_VERSION:
+                print(f"\n\n[UPDATE] This version is outdated.\nCurrent Version: {LOCAL_VERSION}\nVersion Found: {LATEST_VERSION}\nDownload the new version at https://www.nexusmods.com/thelastofuspart2/mods/170\n\n")
+    except Exception as e:
+        print(f"\nCould not check for updates: {e}.")
 
 def settings(responses, filename=jsonfile):
     with open(filename, 'w', encoding='utf-8') as f:

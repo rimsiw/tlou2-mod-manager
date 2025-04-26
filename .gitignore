@@ -3,3 +3,4 @@ settings.json
 data/
 dist/
 build/
+*.spec
