@@ -245,4 +245,5 @@ def main():
 
 if __name__ == "__main__":
     print("=== The Last of Us Part II Mod Manager ===")
+    update()
     main()
