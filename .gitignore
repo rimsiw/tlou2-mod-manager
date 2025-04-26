@@ -1,2 +1,5 @@
 .venv/
 settings.json
+data/
+dist/
+build/
